@@ -1,0 +1,364 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2021-09-27 16:54:09.879180",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "party_type",
+  "is_signed",
+  "cb_party",
+  "party",
+  "party_name",
+  "sb_signee",
+  "signee",
+  "signed_on",
+  "cb_user",
+  "signee_company",
+  "signed_by_company",
+  "sb_terms",
+  "contract_period",
+  "no_of_years",
+  "no_of_months",
+  "cb_date",
+  "start_date",
+  "end_date",
+  "lease_unit_details",
+  "unit_type",
+  "branch",
+  "warehouse",
+  "address",
+  "column_break_19",
+  "rent_value_",
+  "annual_increase",
+  "annual_increase_type",
+  "with_insurance",
+  "insurance_value",
+  "column_break_25",
+  "insurance_account",
+  "cash_account",
+  "rental_expense_account",
+  "sb_contract",
+  "contract_template",
+  "contract_terms",
+  "sb_references",
+  "document_type",
+  "cb_links",
+  "document_name",
+  "amended_from",
+  "repayment_schedule_section",
+  "contract_repayment_schedule"
+ ],
+ "fields": [
+  {
+   "default": "CONT-.YYYY.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "CONT-.YYYY.-",
+   "read_only": 1
+  },
+  {
+   "default": "Supplier",
+   "fieldname": "party_type",
+   "fieldtype": "Select",
+   "label": "Party Type",
+   "options": "Customer\nSupplier",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "is_signed",
+   "fieldtype": "Check",
+   "label": "Signed"
+  },
+  {
+   "fieldname": "cb_party",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "party_name.supplier_name",
+   "fieldname": "party_name",
+   "fieldtype": "Data",
+   "label": "Party Name"
+  },
+  {
+   "fieldname": "sb_terms",
+   "fieldtype": "Section Break",
+   "label": "Contract Period"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cb_date",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lease_unit_details",
+   "fieldtype": "Section Break",
+   "label": "Lease Unit Details"
+  },
+  {
+   "fieldname": "unit_type",
+   "fieldtype": "Select",
+   "label": "Unit Type",
+   "mandatory_depends_on": "eval:doc.contract_type==\"Lease\"",
+   "options": "\nApartment\nOffice\nShowroom\nWarehouse"
+  },
+  {
+   "depends_on": "eval:in_list([\"Office\",\"Showroom\"], doc.unit_type)",
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "depends_on": "eval:doc.unit_type == \"Warehouse\"",
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "rent_value_",
+   "fieldtype": "Currency",
+   "label": "Rent Amount",
+   "reqd": 1
+  },
+  {
+   "fieldname": "annual_increase",
+   "fieldtype": "Percent",
+   "label": "Annual Increase (%)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "annual_increase_type",
+   "fieldtype": "Select",
+   "label": "Annual Increase Type",
+   "options": "\nFixed Rate\nAccumulated Rate",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_19",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address",
+   "mandatory_depends_on": "eval:doc.contract_type==\"Lease\""
+  },
+  {
+   "depends_on": "eval:doc.with_insurance",
+   "fieldname": "insurance_value",
+   "fieldtype": "Currency",
+   "label": "Insurance Amount",
+   "mandatory_depends_on": "eval:doc.with_insurance"
+  },
+  {
+   "depends_on": "eval:doc.is_signed==1",
+   "fieldname": "sb_signee",
+   "fieldtype": "Section Break",
+   "label": "Signee Details"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "signee",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "label": "Signee"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "signed_on",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Signed On"
+  },
+  {
+   "fieldname": "cb_user",
+   "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval:doc.docstatus==0",
+   "fieldname": "sb_contract",
+   "fieldtype": "Section Break",
+   "label": "Contract Details"
+  },
+  {
+   "fieldname": "contract_template",
+   "fieldtype": "Link",
+   "label": "Contract Template",
+   "options": "Contract Template"
+  },
+  {
+   "fieldname": "contract_terms",
+   "fieldtype": "Text Editor",
+   "in_list_view": 1,
+   "label": "Contract Terms",
+   "reqd": 1
+  },
+  {
+   "fieldname": "signee_company",
+   "fieldtype": "Signature",
+   "label": "Signee (Company)"
+  },
+  {
+   "fieldname": "signed_by_company",
+   "fieldtype": "Link",
+   "label": "Signed By (Company)",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sb_references",
+   "fieldtype": "Section Break",
+   "label": "References"
+  },
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Select",
+   "label": "Document Type",
+   "options": "\nQuotation\nProject\nSales Order\nPurchase Order\nSales Invoice\nPurchase Invoice"
+  },
+  {
+   "fieldname": "cb_links",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "document_name",
+   "fieldtype": "Dynamic Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Document Name",
+   "options": "document_type"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Lease Contract",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "in_standard_filter": 1,
+   "label": "Party",
+   "options": "party_type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "repayment_schedule_section",
+   "fieldtype": "Section Break",
+   "label": "Repayment Schedule"
+  },
+  {
+   "fieldname": "contract_repayment_schedule",
+   "fieldtype": "Table",
+   "label": "Contract Repayment Schedule",
+   "options": "Contract Repayment Schedule"
+  },
+  {
+   "depends_on": "eval:doc.contract_period == \"1 Year Or More\"",
+   "fieldname": "no_of_years",
+   "fieldtype": "Int",
+   "label": "No Of Years",
+   "mandatory_depends_on": "eval:doc.contract_period == \"1 Year Or More\""
+  },
+  {
+   "depends_on": "eval:doc.contract_period",
+   "fieldname": "no_of_months",
+   "fieldtype": "Int",
+   "label": "No Of Months",
+   "mandatory_depends_on": "eval:doc.contract_period == \"Less Than 1 Year\"",
+   "read_only_depends_on": "eval:doc.contract_period == \"1 Year Or More\""
+  },
+  {
+   "fieldname": "contract_period",
+   "fieldtype": "Select",
+   "label": "Contract Period",
+   "options": "\nLess Than 1 Year\n1 Year Or More",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "with_insurance",
+   "fieldtype": "Check",
+   "label": "With Insurance"
+  },
+  {
+   "depends_on": "eval:doc.with_insurance",
+   "fieldname": "insurance_account",
+   "fieldtype": "Link",
+   "label": "Insurance Account",
+   "mandatory_depends_on": "eval:doc.with_insurance",
+   "options": "Account"
+  },
+  {
+   "fieldname": "cash_account",
+   "fieldtype": "Link",
+   "label": "Cash Account",
+   "options": "Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "rental_expense_account",
+   "fieldtype": "Link",
+   "label": "Rental Expense Account",
+   "options": "Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_25",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2021-09-28 16:51:52.159395",
+ "modified_by": "Administrator",
+ "module": "ECS Contracts",
+ "name": "Lease Contract",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "party_name",
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}
