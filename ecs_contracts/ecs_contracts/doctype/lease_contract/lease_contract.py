@@ -19,6 +19,11 @@ class LeaseContract(Document):
 	@frappe.whitelist()
 	def validate(self):
 		self.calculate_repayment_schedule()
+		self.calculate_totals()
+
+	@frappe.whitelist()
+	def on_submit(self):
+		self.make_journal_entry()
 
 	@frappe.whitelist()
 	def calculate_repayment_schedule(self):
@@ -237,4 +242,76 @@ class LeaseContract(Document):
 			b += 1
 			a -= 1
 
+	@frappe.whitelist()
+	def calculate_totals(self):
+		self.total_payable_amount = 0
+
+		for data in self.contract_repayment_schedule:
+			self.total_payable_amount += data.monthly_payment
+
+	@frappe.whitelist()
+	def make_journal_entry(self):
+		if self.with_insurance:
+			accounts = [
+				{
+					"doctype": "Journal Entry Account",
+					"account": self.insurance_account,
+					"credit": 0,
+					"debit": self.insurance_value,
+					"debit_in_account_currency": self.insurance_value,
+					"user_remark": self.name
+				},
+				{
+					"doctype": "Journal Entry Account",
+					"account": self.cash_account,
+					"credit": self.insurance_value,
+					"debit": 0,
+					"credit_in_account_currency": self.insurance_value,
+					"user_remark": self.name
+				}
+			]
+			new_doc = frappe.get_doc({
+				"doctype": "Journal Entry",
+				"voucher_type": "Journal Entry",
+				"reference_doctype": "Lease Contract",
+				"reference_link": self.name,
+				"cheque_no": self.name,
+				"cheque_date": self.posting_date,
+				"posting_date": self.posting_date,
+				"accounts": accounts,
+				"user_remark": self.party_name
+
+			})
+			new_doc.insert()
+			new_doc.submit()
+
+			self.reload()
+
 	pass
+
+def make_paid(doc, method=None):
+	if doc.reference_doctype == "Lease Contract" and doc.bill_no:
+		frappe.set_value('Contract Repayment Schedule', doc.bill_no, 'is_paid', '1')
+		frappe.set_value('Contract Repayment Schedule', doc.bill_no, 'journal_entry', doc.name)
+		row = frappe.get_doc('Contract Repayment Schedule', doc.bill_no)
+		parent = frappe.get_doc('Lease Contract', row.parent)
+		cur_tot = parent.total_amount_paid
+		row_tot = row.monthly_payment
+		new_tot = cur_tot + row_tot
+		frappe.set_value('Lease Contract', row.parent, 'total_amount_paid', new_tot)
+
+def journal_cancel(doc, method=None):
+	if doc.reference_doctype == "Lease Contract" and doc.bill_no:
+		frappe.db.sql("""update `tabJournal Entry` set reference_link ='' where bill_no='{bill_no}'""".format(bill_no=bill_no))
+		frappe.set_value('Contract Repayment Schedule', doc.bill_no, 'is_paid', '0')
+		frappe.set_value('Contract Repayment Schedule', doc.bill_no, 'journal_entry', "")
+		row = frappe.get_doc('Contract Repayment Schedule', doc.bill_no)
+		parent = frappe.get_doc('Lease Contract', row.parent)
+		cur_tot = parent.total_amount_paid
+		row_tot = row.monthly_payment
+		new_tot = cur_tot - row_tot
+		frappe.set_value('Lease Contract', row.parent, 'total_amount_paid', new_tot)
+
+def set_accured():
+	frappe.db.sql("""update `tabContract Repayment Schedule` set is_accrued = '1' where payment_date >= date(CURRENT_DATE() + 5) and payment_date < date(CURRENT_DATE() +10) """)
+	frappe.db.sql("""update `tabContract Loan Repayment Schedule` set is_accrued = '1' where payment_date < CURRENT_DATE()""")

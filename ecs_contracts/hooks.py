@@ -11,6 +11,19 @@ app_license = "MIT"
 
 # Includes in <head>
 # ------------------
+doc_events = {
+	"Journal Entry": {
+		"on_submit": "ecs_contracts.ecs_contracts.doctype.lease_contract.lease_contract.make_paid",
+		"on_cancel": "ecs_contracts.ecs_contracts.doctype.lease_contract.lease_contract.journal_cancel"
+	}
+}
+scheduler_events = {
+
+"daily": [
+	"ecs_contracts.ecs_contracts.doctype.lease_contract.lease_contract.set_accured"
+]
+
+}
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/ecs_contracts/css/ecs_contracts.css"

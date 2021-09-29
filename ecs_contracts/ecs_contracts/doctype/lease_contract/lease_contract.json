@@ -7,9 +7,10 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "party_type",
+  "posting_date",
   "is_signed",
   "cb_party",
+  "party_type",
   "party",
   "party_name",
   "sb_signee",
@@ -49,7 +50,9 @@
   "document_name",
   "amended_from",
   "repayment_schedule_section",
-  "contract_repayment_schedule"
+  "contract_repayment_schedule",
+  "total_payable_amount",
+  "total_amount_paid"
  ],
  "fields": [
   {
@@ -84,7 +87,8 @@
    "fetch_from": "party_name.supplier_name",
    "fieldname": "party_name",
    "fieldtype": "Data",
-   "label": "Party Name"
+   "label": "Party Name",
+   "read_only": 1
   },
   {
    "fieldname": "sb_terms",
@@ -279,25 +283,25 @@
    "options": "Contract Repayment Schedule"
   },
   {
-   "depends_on": "eval:doc.contract_period == \"1 Year Or More\"",
+   "depends_on": "eval:doc.contract_period == \"Years\"",
    "fieldname": "no_of_years",
    "fieldtype": "Int",
    "label": "No Of Years",
-   "mandatory_depends_on": "eval:doc.contract_period == \"1 Year Or More\""
+   "mandatory_depends_on": "eval:doc.contract_period == \"Years\""
   },
   {
    "depends_on": "eval:doc.contract_period",
    "fieldname": "no_of_months",
    "fieldtype": "Int",
    "label": "No Of Months",
-   "mandatory_depends_on": "eval:doc.contract_period == \"Less Than 1 Year\"",
-   "read_only_depends_on": "eval:doc.contract_period == \"1 Year Or More\""
+   "mandatory_depends_on": "eval:doc.contract_period == \"Months\"",
+   "read_only_depends_on": "eval:doc.contract_period == \"Years\""
   },
   {
    "fieldname": "contract_period",
    "fieldtype": "Select",
-   "label": "Contract Period",
-   "options": "\nLess Than 1 Year\n1 Year Or More",
+   "label": "Contract Period (Months / Years)",
+   "options": "\nMonths\nYears",
    "reqd": 1
   },
   {
@@ -331,12 +335,36 @@
   {
    "fieldname": "column_break_25",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_payable_amount",
+   "fieldtype": "Currency",
+   "label": "Total Payable Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_amount_paid",
+   "fieldtype": "Currency",
+   "label": "Total Amount Paid",
+   "read_only": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2021-09-28 16:51:52.159395",
+ "links": [
+  {
+   "link_doctype": "Journal Entry",
+   "link_fieldname": "reference_link"
+  }
+ ],
+ "modified": "2021-09-29 12:22:49.161851",
  "modified_by": "Administrator",
  "module": "ECS Contracts",
  "name": "Lease Contract",
