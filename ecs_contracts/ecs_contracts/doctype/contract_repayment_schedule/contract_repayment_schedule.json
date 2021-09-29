@@ -9,9 +9,9 @@
   "monthly_payment",
   "column_break_5",
   "make_payment",
+  "is_accrued",
   "is_paid",
-  "journal_entry",
-  "is_accrued"
+  "journal_entry"
  ],
  "fields": [
   {
@@ -19,7 +19,8 @@
    "fieldname": "payment_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Payment Date"
+   "label": "Payment Date",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_5",
@@ -28,15 +29,14 @@
   {
    "bold": 1,
    "columns": 1,
-   "depends_on": "eval:doc.is_paid ==0",
+   "depends_on": "eval:doc.is_paid == 0 && doc.docstatus == 1",
    "fieldname": "make_payment",
    "fieldtype": "Button",
-   "in_list_view": 1,
    "label": "Pay"
   },
   {
    "allow_on_submit": 1,
-   "columns": 1,
+   "columns": 2,
    "default": "0",
    "fieldname": "is_paid",
    "fieldtype": "Check",
@@ -70,12 +70,13 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Monthly Payment",
-   "options": "Company:company:default_currency"
+   "options": "Company:company:default_currency",
+   "read_only": 1
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2021-09-28 12:48:01.034111",
+ "modified": "2021-09-29 14:11:54.557856",
  "modified_by": "Administrator",
  "module": "ECS Contracts",
  "name": "Contract Repayment Schedule",

@@ -311,6 +311,9 @@ def journal_cancel(doc, method=None):
 		row_tot = row.monthly_payment
 		new_tot = cur_tot - row_tot
 		frappe.set_value('Lease Contract', row.parent, 'total_amount_paid', new_tot)
+	if doc.reference_doctype == "Lease Contract":
+		contract = frappe.get_doc('Lease Contract', doc.reference_link)
+		contract.cancel()
 
 def set_accured():
 	frappe.db.sql("""update `tabContract Repayment Schedule` set is_accrued = '1' where payment_date >= date(CURRENT_DATE() + 5) and payment_date < date(CURRENT_DATE() +10) """)

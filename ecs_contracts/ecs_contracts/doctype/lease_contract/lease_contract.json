@@ -300,7 +300,7 @@
   {
    "fieldname": "contract_period",
    "fieldtype": "Select",
-   "label": "Contract Period (Months / Years)",
+   "label": "Contract Period UOM (Months / Years)",
    "options": "\nMonths\nYears",
    "reqd": 1
   },
@@ -337,12 +337,14 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_payable_amount",
    "fieldtype": "Currency",
    "label": "Total Payable Amount",
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_amount_paid",
    "fieldtype": "Currency",
    "label": "Total Amount Paid",
@@ -364,7 +366,7 @@
    "link_fieldname": "reference_link"
   }
  ],
- "modified": "2021-09-29 12:22:49.161851",
+ "modified": "2021-09-29 14:14:47.168325",
  "modified_by": "Administrator",
  "module": "ECS Contracts",
  "name": "Lease Contract",
@@ -379,7 +381,9 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "select": 1,
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
