@@ -58,12 +58,12 @@
    "type": "Link"
   }
  ],
- "modified": "2021-09-29 17:38:25.212104",
+ "modified": "2021-12-01 17:59:21.156849",
  "modified_by": "Administrator",
  "module": "ECS Contracts",
  "name": "Contracts",
  "owner": "Administrator",
  "pin_to_bottom": 0,
- "pin_to_top": 0,
+ "pin_to_top": 1,
  "shortcuts": []
 }

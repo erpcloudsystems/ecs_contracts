@@ -256,6 +256,8 @@ class LeaseContract(Document):
 				{
 					"doctype": "Journal Entry Account",
 					"account": self.insurance_account,
+					"party_type": self.party_type,
+					"party": self.party,
 					"credit": 0,
 					"debit": self.insurance_value,
 					"debit_in_account_currency": self.insurance_value,

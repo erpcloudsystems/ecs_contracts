@@ -119,4 +119,23 @@ function submit_je(frm) {
 }
 });
 
-
+frappe.ui.form.on("Lease Contract", {
+	setup: function(frm) {
+            frm.set_query("insurance_account", function() {
+                if (cur_frm.doc.party_type == "Supplier"){
+                    return {
+                            filters: [
+                                ["Account","account_type", "=", "Payable"]
+                            ]
+                    }
+                };
+                if (cur_frm.doc.party_type == "Customer"){
+                    return {
+                            filters: [
+                                ["Account","account_type", "=", "Receivable"]
+                            ]
+                    }
+                };
+            });
+        }
+});
